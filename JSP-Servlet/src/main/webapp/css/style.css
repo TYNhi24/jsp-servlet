@@ -1,0 +1,393 @@
+/* Multi-Language Product System Styles */
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Card Animations */
+.card-hover {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Button Styles */
+.btn-gradient-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    color: white;
+}
+
+.btn-gradient-success {
+    background: linear-gradient(45deg, #00d2d3, #54a0ff);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-success:hover {
+    background: linear-gradient(45deg, #54a0ff, #00d2d3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    color: white;
+}
+
+.btn-gradient-danger {
+    background: linear-gradient(45deg, #ff4757, #ff3838);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-danger:hover {
+    background: linear-gradient(45deg, #ff3838, #ff4757);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    color: white;
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Card Styles */
+.card-modern {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+}
+
+/* Badge Styles */
+.badge-gradient-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+.badge-gradient-success {
+    background: linear-gradient(45deg, #00d2d3, #54a0ff);
+    color: white;
+}
+
+.badge-gradient-warning {
+    background: linear-gradient(45deg, #ffa726, #ff7043);
+    color: white;
+}
+
+.badge-gradient-danger {
+    background: linear-gradient(45deg, #ff4757, #ff3838);
+    color: white;
+}
+
+/* Table Styles */
+.table-modern {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.table-modern thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.table-modern tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Form Styles */
+.form-floating-modern {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-floating-modern input,
+.form-floating-modern select,
+.form-floating-modern textarea {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.form-floating-modern input:focus,
+.form-floating-modern select:focus,
+.form-floating-modern textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Language Selector */
+.language-selector {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.language-selector .btn-group .btn {
+    border-radius: 25px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.language-selector .btn-outline-light:hover {
+    background: white;
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* Product Cards */
+.product-card {
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+.product-card .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+}
+
+.product-card .price-tag {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* Statistics Cards */
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.stat-card i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Progress Bars */
+.progress-modern {
+    height: 10px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+}
+
+.progress-modern .progress-bar {
+    border-radius: 10px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+}
+
+/* Alert Styles */
+.alert-modern {
+    border: none;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.alert-success-modern {
+    background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%);
+    color: white;
+}
+
+.alert-danger-modern {
+    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+    color: white;
+}
+
+.alert-warning-modern {
+    background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+    color: white;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 50px 0;
+        text-align: center;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .feature-card {
+        margin-bottom: 20px;
+    }
+    
+    .btn-hero {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .language-selector {
+        text-align: center;
+    }
+    
+    .language-selector .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .language-selector .btn {
+        margin: 5px 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .product-card {
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Custom Utilities */
+.text-gradient {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    .btn {
+        display: none !important;
+    }
+}
