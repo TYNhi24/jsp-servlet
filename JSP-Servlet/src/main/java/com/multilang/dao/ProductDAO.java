@@ -8,6 +8,7 @@ import com.multilang.util.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDAO {
 
@@ -156,7 +157,60 @@ public class ProductDAO {
         }
     }
 
-    public void insertProduct(Product product) {
+    public List<ProductCategory> getAllProductCategories() {
+        List<ProductCategory> categories = new ArrayList<>();
+        String sql = "SELECT ProductCategoryID, CanBeShipped FROM ProductCategory ORDER BY ProductCategoryID";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                ProductCategory category = new ProductCategory();
+                category.setProductCategoryId(rs.getInt("ProductCategoryID"));
+                category.setCanBeShipped(rs.getBoolean("CanBeShipped"));
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return categories;
+    }
+
+    public List<ProductCategory> getAllProductCategoriesWithTranslation(String languageId) {
+        List<ProductCategory> categories = new ArrayList<>();
+        String sql = """
+            SELECT 
+                pc.ProductCategoryID,
+                pc.CanBeShipped,
+                pct.CategoryName
+            FROM ProductCategory pc
+            LEFT JOIN ProductCategoryTranslation pct ON pc.ProductCategoryID = pct.ProductCategoryID AND pct.LanguageID = ?
+            ORDER BY pc.ProductCategoryID
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, languageId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                ProductCategory category = new ProductCategory();
+                category.setProductCategoryId(rs.getInt("ProductCategoryID"));
+                category.setCanBeShipped(rs.getBoolean("CanBeShipped"));
+                category.setCategoryName(rs.getString("CategoryName"));
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return categories;
+    }
+
+    public void insertProduct(Product product, Map<String, String[]> translations) {
         String insertProduct = """
             INSERT INTO Product (Price, Weight, ProductCategoryID) 
             VALUES (?, ?, ?)
@@ -186,15 +240,84 @@ public class ProductDAO {
                         
                         // Insert translations for all languages
                         try (PreparedStatement pstmt2 = conn.prepareStatement(insertTranslation)) {
-                            // This would need to be expanded to handle multiple language translations
-                            pstmt2.setInt(1, productId);
-                            pstmt2.setString(2, "vi"); // Default language
-                            pstmt2.setString(3, product.getProductName());
-                            pstmt2.setString(4, product.getProductDescription());
-                            pstmt2.executeUpdate();
+                            for (Map.Entry<String, String[]> entry : translations.entrySet()) {
+                                String languageId = entry.getKey();
+                                String[] values = entry.getValue();
+                                String productName = values[0];
+                                String productDescription = values.length > 1 ? values[1] : "";
+                                
+                                if (productName != null && !productName.trim().isEmpty()) {
+                                    pstmt2.setInt(1, productId);
+                                    pstmt2.setString(2, languageId);
+                                    pstmt2.setString(3, productName.trim());
+                                    pstmt2.setString(4, productDescription != null ? productDescription.trim() : "");
+                                    pstmt2.executeUpdate();
+                                }
+                            }
                         }
                     } else {
                         throw new SQLException("Creating product failed, no ID obtained.");
+                    }
+                }
+                
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateProduct(Product product, Map<String, String[]> translations) {
+        String updateProduct = """
+            UPDATE Product 
+            SET Price = ?, Weight = ?, ProductCategoryID = ?
+            WHERE ProductID = ?
+            """;
+        
+        String deleteTranslations = "DELETE FROM ProductTranslation WHERE ProductID = ?";
+        
+        String insertTranslation = """
+            INSERT INTO ProductTranslation (ProductID, LanguageID, ProductName, ProductDescription) 
+            VALUES (?, ?, ?, ?)
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            
+            try {
+                // Update basic product info
+                try (PreparedStatement pstmt1 = conn.prepareStatement(updateProduct)) {
+                    pstmt1.setBigDecimal(1, product.getPrice());
+                    pstmt1.setBigDecimal(2, product.getWeight());
+                    pstmt1.setInt(3, product.getProductCategory().getProductCategoryId());
+                    pstmt1.setInt(4, product.getProductId());
+                    pstmt1.executeUpdate();
+                }
+                
+                // Delete existing translations
+                try (PreparedStatement pstmt2 = conn.prepareStatement(deleteTranslations)) {
+                    pstmt2.setInt(1, product.getProductId());
+                    pstmt2.executeUpdate();
+                }
+                
+                // Insert new translations
+                try (PreparedStatement pstmt3 = conn.prepareStatement(insertTranslation)) {
+                    for (Map.Entry<String, String[]> entry : translations.entrySet()) {
+                        String languageId = entry.getKey();
+                        String[] values = entry.getValue();
+                        String productName = values[0];
+                        String productDescription = values.length > 1 ? values[1] : "";
+                        
+                        if (productName != null && !productName.trim().isEmpty()) {
+                            pstmt3.setInt(1, product.getProductId());
+                            pstmt3.setString(2, languageId);
+                            pstmt3.setString(3, productName.trim());
+                            pstmt3.setString(4, productDescription != null ? productDescription.trim() : "");
+                            pstmt3.executeUpdate();
+                        }
                     }
                 }
                 
