@@ -1,5 +1,7 @@
 /** 
  * Multi-Language Product System - Main JavaScript File
+ * 
+ * JavaScript phía client (frontend).
  */
 
 // Global variables
@@ -7,9 +9,9 @@ let isLoading = false;
 
 // DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-    setupEventListeners();
-    addAnimations();
+    initializeApp();//khởi tạo giao diện, hiệu ứng.
+    setupEventListeners();//gắn sự kiện cho nút bấm, form, tìm kiếm.
+    addAnimations();// (chưa viết, để trống).
 });
 
 /**
@@ -20,10 +22,10 @@ function initializeApp() {
     
     // Check if we're on the product list page
     if (window.location.pathname.includes('products') || window.location.search.includes('products')) {
-        initializeProductList();
+        initializeProductList();//gọi hàm khởi tạo danh sách sản phẩm.
     }
     
-    // Add fade-in animation to all cards
+    // Thêm hiệu ứng fade-in cho từng thẻ .card.
     const cards = document.querySelectorAll('.card, .feature-card, .stat-card');
     cards.forEach((card, index) => {
         setTimeout(() => {
@@ -59,22 +61,25 @@ function setupEventListeners() {
 
 /**
  * Setup product action listeners
+ * chuẩn hóa cách xử lý click, tránh lỗi JS inline.
  */
 function setupProductActionListeners() {
-    // Delete product buttons
-    const deleteButtons = document.querySelectorAll('[onclick*="deleteProduct"]');
-    deleteButtons.forEach(button => {
-        button.removeAttribute('onclick');
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const productId = this.getAttribute('data-product-id') || 
-                             this.onclick?.toString().match(/\d+/)?.[0];
-            if (productId) {
-                deleteProduct(productId);
-            }
-        });
+  const deleteButtons = document.querySelectorAll('[onclick*="deleteProduct"]');
+  deleteButtons.forEach(button => {
+    button.removeAttribute('onclick');
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const productId =
+        this.getAttribute('data-product-id') ||
+        (this.onclick && this.onclick.toString().match(/\d+/) && this.onclick.toString().match(/\d+/)[0]);
+
+      if (productId) {
+        deleteProduct(productId);
+      }
     });
-    
+  });
+   
     // View details buttons
     const detailButtons = document.querySelectorAll('[href*="action=detail"]');
     detailButtons.forEach(button => {
@@ -86,6 +91,7 @@ function setupProductActionListeners() {
 
 /**
  * Setup form validation
+ * Giúp tránh người dùng gửi dữ liệu sai, giống validate bên server
  */
 function setupFormValidation() {
     const forms = document.querySelectorAll('form');
@@ -103,6 +109,7 @@ function setupFormValidation() {
 
 /**
  * Setup search functionality
+ * Tối ưu hiệu suất tìm kiếm realtime.??
  */
 function setupSearchFunctionality() {
     const searchInput = document.querySelector('#searchInput');
@@ -132,6 +139,7 @@ function setupSmoothScrolling() {
 
 /**
  * Initialize product list functionality
+ * Thêm hiệu ứng “nổi lên” khi rê chuột lên card sản phẩm.
  */
 function initializeProductList() {
     // Add hover effects to product cards
@@ -147,7 +155,7 @@ function initializeProductList() {
     });
     
     // Initialize tooltips
-    initializeTooltips();
+    initializeTooltips();//chưa viết
 }
 
 /**
@@ -191,6 +199,8 @@ function deleteProduct(productId) {
 
 /**
  * Show loading animation
+ * 
+ * Giúp người dùng biết thao tác đang chạy.
  */
 function showLoading(element) {
     if (isLoading) return;
@@ -234,13 +244,35 @@ function debounce(func, delay) {
         timeout = setTimeout(() => func.apply(this, args), delay);
     };
 }
+/**
+ * 
+ * debounce(func, delay) → hạn chế tần suất gọi hàm.
 
+showAlert(msg, type) → hiển thị thông báo.
+
+showConfirmDialog(title, msg, onConfirm) → hộp thoại xác nhận.
+
+validateForm() → tạm trả về true (chưa viết thật).
+
+handleSearch() → placeholder (chưa viết).
+ */
 // Dummy implementations for missing functions (avoid JS errors)
 function addAnimations() {}
 function initializeTooltips() {}
 function validateForm() { return true; }
-function showAlert(msg, type) { alert(msg); }
-function showConfirmDialog(title, msg, onConfirm) {
-    if (confirm(msg)) onConfirm();
+function showAlert(msg, type) {
+  if (type === 'error') alert('❌ ' + msg);
+  else if (type === 'success') alert('✅ ' + msg);
+  else alert(msg);
 }
+
+function showConfirmDialog(title, msg, onConfirm) {
+  console.log("Confirm Dialog:", title); 
+  const userConfirmed = confirm(msg);
+
+  if (userConfirmed && typeof onConfirm === "function") {
+    onConfirm(); 
+  }
+}
+
 function handleSearch() {}

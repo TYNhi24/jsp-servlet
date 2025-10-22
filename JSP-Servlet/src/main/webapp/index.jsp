@@ -59,9 +59,11 @@
                         Dễ dàng thêm, sửa, xóa và xem chi tiết sản phẩm bằng các ngôn ngữ khác nhau.
                     </p>
                     <div class="d-grid gap-3 d-md-flex">
+                    
                         <a href="products" class="btn btn-warning btn-hero">
                             <i class="fas fa-rocket me-2"></i>Bắt đầu ngay
                         </a>
+                        
                         <a href="#features" class="btn btn-outline-light btn-hero">
                             <i class="fas fa-info-circle me-2"></i>Tìm hiểu thêm
                         </a>
@@ -200,9 +202,8 @@
                     <p class="text-muted">Hệ thống demo quản lý sản phẩm đa ngôn ngữ sử dụng JSP Servlet</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <p class="text-muted mb-0">
-                        <i class="fas fa-code me-2"></i>Built with JSP, Servlet, MySQL & Bootstrap 5
-                    </p>
+                    <p class="text-muted mb-0">Built with JSP, Servlet, MySQL &amp; Bootstrap 5.</p>
+
                 </div>
             </div>
         </div>

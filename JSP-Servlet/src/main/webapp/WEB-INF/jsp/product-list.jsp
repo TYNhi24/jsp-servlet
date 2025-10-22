@@ -64,7 +64,18 @@
                         <h1 class="display-4 fw-bold text-primary">
                             <i class="fas fa-boxes me-3"></i>Hệ thống sản phẩm đa ngôn ngữ
                         </h1>
-                        <p class="lead text-muted">Quản lý sản phẩm với hỗ trợ đa ngôn ngữ</p>
+                         <p class="lead text-muted">Quản lý sản phẩm với hỗ trợ đa ngôn ngữ</p>
+                        <div>
+						    <form action="products" method="get" class="d-flex mt-3">
+						        <input type="hidden" name="action" value="search">
+						        <input type="text" name="keyword" class="form-control me-2" 
+						               placeholder="Tìm kiếm sản phẩm..." 
+						               value="${param.keyword != null ? param.keyword : ''}">
+						        <button type="submit" class="btn btn-outline-primary">
+						            <i class="fas fa-search"></i> Tìm kiếm
+						        </button>
+						    </form>
+						</div>                  
                     </div>
                     <div>
                         <a href="products?action=add" class="btn btn-success btn-lg">

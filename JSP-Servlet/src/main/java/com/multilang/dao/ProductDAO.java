@@ -330,4 +330,63 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+    
+    public List<Product> searchProductsWithTranslation(String keyword, String languageId) {
+        List<Product> products = new ArrayList<>();
+        String sql = """
+            SELECT 
+                p.ProductID,
+                p.Price,
+                p.Weight,
+                p.ProductCategoryID,
+                pt.ProductName,
+                pt.ProductDescription,
+                pct.CategoryName,
+                pc.CanBeShipped
+            FROM Product p
+            LEFT JOIN ProductTranslation pt 
+                ON p.ProductID = pt.ProductID 
+                AND pt.LanguageID = ?
+            LEFT JOIN ProductCategory pc 
+                ON p.ProductCategoryID = pc.ProductCategoryID
+            LEFT JOIN ProductCategoryTranslation pct 
+                ON pc.ProductCategoryID = pct.ProductCategoryID 
+                AND pct.LanguageID = ?
+            WHERE pt.ProductName LIKE ? OR pt.ProductDescription LIKE ?
+            ORDER BY p.ProductID
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, languageId);
+            ps.setString(2, languageId);
+            ps.setString(3, "%" + keyword + "%");
+            ps.setString(4, "%" + keyword + "%");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setPrice(rs.getBigDecimal("Price"));
+                product.setWeight(rs.getBigDecimal("Weight"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setProductDescription(rs.getString("ProductDescription"));
+
+                ProductCategory category = new ProductCategory();
+                category.setProductCategoryId(rs.getInt("ProductCategoryID"));
+                category.setCategoryName(rs.getString("CategoryName"));
+                category.setCanBeShipped(rs.getBoolean("CanBeShipped"));
+
+                product.setProductCategory(category);
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+
 }

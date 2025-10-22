@@ -6,7 +6,8 @@ import com.multilang.model.ProductCategory;
 import com.multilang.model.Language;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/products")
+//@WebServlet("/products")
 public class ProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProductDAO productDAO;
@@ -55,6 +56,9 @@ public class ProductServlet extends HttpServlet {
                     break;
                 case "edit":
                     showEditForm(request, response, languageId);
+                    break;
+                case "search":
+                	searchForm(request, response, languageId);
                     break;
                 default:
                     listProducts(request, response, languageId);
@@ -359,4 +363,32 @@ public class ProductServlet extends HttpServlet {
             response.sendRedirect("products?error=delete_failed");
         }
     }
+    
+    private void searchForm(HttpServletRequest request, HttpServletResponse response, String languageId)
+            throws ServletException, IOException {
+
+        String keyword = request.getParameter("keyword");
+        if (keyword == null) {
+            keyword = "";
+        }
+
+        // Lấy danh sách sản phẩm phù hợp
+        List<Product> products = productDAO.searchProductsWithTranslation(keyword, languageId);
+        List<Language> languages = productDAO.getAllLanguages();
+
+        // Gửi dữ liệu sang JSP
+        request.setAttribute("products", products);
+        request.setAttribute("languages", languages);
+        request.setAttribute("currentLang", languageId);
+        request.setAttribute("keyword", keyword);
+
+        // Nếu không tìm thấy sản phẩm, có thể gửi thêm thông báo
+        if (products == null || products.isEmpty()) {
+            request.setAttribute("noResultsMessage", "Không tìm thấy sản phẩm nào phù hợp với từ khóa \"" + keyword + "\"");
+        }
+
+        request.getRequestDispatcher("/WEB-INF/jsp/product-list.jsp").forward(request, response);
+    }
+
+    
 }
